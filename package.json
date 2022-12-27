@@ -1,0 +1,23 @@
+{
+  "name": "pdf2json",
+  "version": "1.0.0",
+  "description": "This is to convert pdf files to json files.",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon ./src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Navin3d"
+  ],
+  "author": "Navin",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.20.1",
+    "express": "^4.18.2",
+    "express-fileupload": "^1.4.0",
+    "nodemon": "^2.0.20",
+    "pdf-parse": "^1.1.1",
+    "pdf.js-extract": "^0.2.1"
+  }
+}
