@@ -29,29 +29,35 @@ const validateMobileNumber = (input_str) => {
 
 const jsonFormatter = async (req, res) => {
     const returnValue = {};
-    const headers = ["Summary", "Experience", "Education", "Licenses & Certifications", "Skills", "Honors & Awards"];
+    const TOPSECTIONNAME = "boomerism";
+    const headers = ["summary", "experience", "education", "licenses & certifications", "skills", "honors & awards", "profile info", "projects", "acheivements"];
     const data = await extractTextFromPdf(req.files.files["data"]);
-    var activeHeader = "header";
+    var activeHeader = TOPSECTIONNAME;
     for(let pageIndex in data.pages) {
         let page = data.pages[pageIndex];
         for(let content of page.content) {
-            if(activeHeader === "header") {
-                returnValue["firstName"] = page.content[0].str.split(" ")[0];
-                returnValue["lastName"] = page.content[0].str.split(" ")[1];
-                if(validateEmail(content.str)) {
-                    returnValue["email"] = content.str;
-                }
-                if(validateMobileNumber(content.str)) {
-                    returnValue["mobileNumber"] = content.str;
-                }
+            if(activeHeader === TOPSECTIONNAME) {
+                if(page.content[0].str.split(" ").length > 1) {
+                    returnValue["firstName"] = page.content[0].str.split(" ")[0];
+                    returnValue["lastName"] = page.content[0].str.split(" ")[1];
+                } else {
+                    returnValue["name"] = page.content[0].str.split(" ");
+                }                
                 // console.log(content.str + " " + validateMobileNumber(content.str));
             }
-            if(headers.includes(content.str.trim())) {
-                activeHeader = content.str;
+            if(headers.includes(content.str.trim().toLowerCase())) {
+                activeHeader = content.str.trim().toLowerCase();
+                console.log("=====> Active Header: ", activeHeader);
                 returnValue[`${activeHeader}`] = "";
             }
-            if(content.str.trim().length > 0 && activeHeader !== "header") {
-                returnValue[`${activeHeader}`] += ((headers.includes(content.str.trim())) ? "" : content.str.trim()) + " ";
+            if(content.str.trim().length > 0 && activeHeader !== TOPSECTIONNAME) {
+                returnValue[`${activeHeader}`] += ((headers.includes(content.str.trim().toLowerCase())) ? "" : content.str.trim()) + " ";
+            }
+            if(validateEmail(content.str)) {
+                returnValue["email"] = content.str;
+            }
+            if(validateMobileNumber(content.str)) {
+                returnValue["mobileNumber"] = content.str;
             }
         }
         if(returnValue["links"]) {
@@ -62,7 +68,7 @@ const jsonFormatter = async (req, res) => {
             returnValue["links"] = page.links
         }
     }
-    returnValue.Skills = returnValue.Skills.split(" • ");
+    returnValue.skills = returnValue.skills.split(" • ");
     return res.status(200).json(returnValue);
 }
 
