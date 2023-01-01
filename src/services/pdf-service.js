@@ -90,12 +90,16 @@ const showAFile = (req, res) => {
 
 const writeFile = (filePath, buffer) => {
     fs.writeFile(filePath, buffer, (err) => {
+        console.error(`=====> ERROR WRITTING A FILE AT Path: (${filePath}) <======`);
         if (err) console.error(err);
     })
 }
 
 const deleteAFile = (filePath) => {
-    fs.rm(filePath);
+    fs.rm(filePath, (err) => {
+        console.error(`=====> ERROR DELETING A FILE AT Path: (${filePath}) <======`);
+        console.error(err);
+    });
 }
 
 const parseAResume = async (fileName, fileBuffer) => {
@@ -114,7 +118,7 @@ const parseAResume = async (fileName, fileBuffer) => {
     .catch(error => {
         console.error(error);
     });    
-    // waiter = await deleteAFile(pdfFilePath);
+    deleteAFile(pdfFilePath);
     return returnValue;
 }
 
