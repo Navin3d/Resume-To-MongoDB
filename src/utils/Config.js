@@ -1,4 +1,4 @@
-const DATABASE_URL = "mongodb+srv://root:root@cluster0.syvha.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+const DATABASE_URL = "mongodb://docker:mongopw@localhost:55000";
 const BASE_URL = "http://localhost:3000";
 module.exports = {
     DATABASE_URL,

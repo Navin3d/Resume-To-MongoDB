@@ -21,6 +21,7 @@
     "pdf-parse": "^1.1.1",
     "pdf.js-extract": "^0.2.1",
     "resume-parser": "^1.1.0",
-    "simple-resume-parser": "^1.1.8"
+    "simple-resume-parser": "^1.1.8",
+    "uuid": "^9.0.0"
   }
 }
