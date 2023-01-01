@@ -5,10 +5,7 @@ const UserSchema = new mongoose.Schema({
         unique: true
     },
     name: String,
-    mobile_number: {
-        type: String,
-        unique: true
-    },
+    mobile_number: String,
     email: {
         type: String,
         unique: true

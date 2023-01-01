@@ -34,38 +34,62 @@ const findAUser = async (userId) => {
 const saveAUser = async (user) => {
     var saved, waiter;
     const skills = user.skills.split(" ");
-    console.log(skills);
     const allSkills = await findAllSkills();
     let detached = new UserModel(user);
-    let exists = await UserModel.count({ email: detached.email });
-    exists += await UserModel.count({ mobile_number: detached.mobile_number });
-    exists += await UserModel.count({ user_id: detached.user_id });
-    if (exists > 0) {
-        saved = await UserModel.updateOne(detached);
-        saved = detached;
+    let existsWithEmail = await UserModel.count({ email: detached.email });
+    if (existsWithEmail != 0) {
+        // console.log(detached);
+        saved = await UserModel.findOne({ email: detached.email });
+        saved.name = detached.name;
+        saved.mobile_number = detached.mobile_number;
+        saved.links = detached.links;
+        saved.save();
     } else {
         detached.user_id = uuid.v4();
+        console.log(detached)
+        detached.delete("_id");
         saved = await UserModel.create(detached);
+        // saved = detached;
     }
-    let finalUpdatedSkills = [];
-    for(let skill of allSkills) {
+    var finalUpdatedSkills = [];
+    for (let skill of allSkills) {
         const keyWords = skill.keywords;
-        for(let userSkill of skills) {
-            console.log(userSkill.toLowerCase() + " - " + keyWords.includes(userSkill.toLowerCase()));
-            if(keyWords.includes(userSkill.toLowerCase()) && !skill.users.includes(saved)) {
-                skill.users.push(saved);
-                console.log(skill);
-                skill.save();
-                finalUpdatedSkills.push(skill);
+        const skillUsersCopy = skill.users;
+        for (let userSkill of skills) {
+            if (keyWords.includes(userSkill.toLowerCase())) {
+                console.log(skillUsersCopy.length)
+                if (skillUsersCopy.length == 0) {
+                    skill.users.push(saved);
+                    skill.save();
+                    finalUpdatedSkills.push(skill);
+                }
+                for (let user of skillUsersCopy) {
+                    if (user["user_id"] != saved.user_id) {
+                        skill.users.push(saved);
+                        // console.log(skill);
+                        // skill.save();
+                        finalUpdatedSkills.push(skill);
+                    }
+                }
             }
         }
     }
-    // waiter = await addUsersToManySkills(finalUpdatedSkills);
+    console.log(finalUpdatedSkills);
+    waiter = await addUsersToManySkills(finalUpdatedSkills);
     return saved;
+}
+
+const saveManyUsers = async () => {
+    
 }
 
 const deleteAllUsers = async (req, res) => {
     await UserModel.deleteMany({});
+    const skills = await SkillModel.find({});
+    for (let skill of skills) {
+        skill.users = [];
+        skill.save();
+    }
     return res.status(200).json("Deleted...");
 }
 

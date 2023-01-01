@@ -21,6 +21,7 @@ pdfRouter.post("/multiple", async (req, res) => {
         const fileName = file["name"];
         const fileBuffer = file["data"];
         const parsedData = await parseAResume(fileName, fileBuffer);
+        await saveAUser(parsedData);
         returnValue.push(parsedData);
     }
     return res.status(200).json(returnValue);
