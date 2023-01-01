@@ -1,22 +1,20 @@
-# Data-Extraction-From-PDF
-This is an sample project used to extract traxt or string from the given pdf.
-
+# Resume-To-MongoDB
 
 ## Project 1: Candidate Profile Automation 
-#  Duration: 30 Days
-    Resume bulk upload with a text parser. When a user uploads 100s of documents (word, pdf), the application will do a text parser and extract the matching fields, and insert them into the database.
-#  Required Modules:
-    1) Search name from the document (doc, Docx, Pdf) and insert it into the table columns' first name & last name using Text Parser,
-    2) Search and find candidate details from social media using Email Id. Fetch and update profiles  from other sources (Linked In, Naukri)
-    3) Create and Automate Skills Management. 
-    4) Search phone, mobile, email, address, city, experience from year to year, college, degree, school, etc.
-    5) Chatbot, SMS, and Whats App Message service.
-# Language: Python, .Net core, Java, Angularjs, React, or any other language which can run on Linux os and supports web API with JSON format.
-# Database: MongoDB, MySql.
-# Reference Link: https://affinda.com/resume-parser
+##  Duration: 30 Days
+Resume bulk upload with a text parser. When a user uploads 100s of documents (word, pdf), the application will do a text parser and extract the matching fields, and insert them into the database.
+##  Required Modules:
++ Search name from the document (doc, Docx, Pdf) and insert it into the table columns' first name & last name using Text Parser,
++ Search and find candidate details from social media using Email Id. Fetch and update profiles  from other sources (Linked In, Naukri)
++ Create and Automate Skills Management. 
++ Search phone, mobile, email, address, city, experience from year to year, college, degree, school, etc.
++ Chatbot, SMS, and Whats App Message service.
+## Language
+  Python, .Net core, Java, Angularjs, React, or any other language which can run on Linux os and supports web API with JSON format.
+## Database
+  MongoDB, MySql.
 
-
-## TODO:
+## Pending
 - Make multiple user persistance.
 - Error handling.
 - Proper logging should be done. It's not working fine now.
@@ -38,5 +36,6 @@ To have have this utility running in your computer follow these steps:
 - If you are going to work with doc [download](http://www.wagner.pp.ru/~vitus/software/catdoc/) and install this.
 
 ## References
+- https://affinda.com/resume-parser
 - https://github.com/perminder-klair/resume-parser
 - https://github.com/likerRr/code4goal-resume-parser
