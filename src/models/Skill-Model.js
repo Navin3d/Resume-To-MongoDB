@@ -1,6 +1,9 @@
-const mongoose = require("mongoose");
+const mongoose = require("../utils/db");
 const SkillSchema = new mongoose.Schema({
-    skill_id: String,
+    skill_id: {
+        type: String,
+        unique: true
+    },
     title: String,
     description: String,
     keywords: [],

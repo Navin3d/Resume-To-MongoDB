@@ -1,5 +1,4 @@
 const uuid = require("uuid");
-const mongoose = require("../utils/db");
 const SkillModel = require("../models/Skill-Model");
 
 
@@ -26,14 +25,14 @@ const getASkill = async (req, res) => {
 }
 
 const saveSkill = async (req, res) => {
-    const body  = req.body;
+    const body = req.body;
     let saved;
+    let detached = new SkillModel(body);
     if(body.skill_id) {
-        const detached = new SkillModel(body);
         saved = await SkillModel.updateOne(detached);
         saved = detached;
     } else {
-        const detached = new SkillModel(body);
+        detached = new SkillModel(body);
         detached.skill_id = uuid.v4();
         saved = await SkillModel.create(detached);
     }
