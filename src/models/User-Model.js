@@ -1,12 +1,11 @@
 const mongoose = require("../utils/db");
 const UserSchema = new mongoose.Schema({
-    _id: mongoose.Types.ObjectId,
     user_id: {
         type: String,
         unique: true
     },
     name: String,
-    mobileNumber: {
+    mobile_number: {
         type: String,
         unique: true
     },

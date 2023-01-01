@@ -1,6 +1,7 @@
 const express = require("express");
 const pdfRouter = express.Router();
 
+const { saveAUser } = require("../services/user-service");
 const { statusCheck, jsonFormatter, parseAResume, showAFile } = require("../services/pdf-service");
 
 pdfRouter.get("/status", statusCheck);
@@ -10,6 +11,7 @@ pdfRouter.post("/single/v2", async (req, res) => {
     const fileName = req.files.files["name"];
     const fileBuffer = req.files.files["data"];
     const resumeData = await parseAResume(fileName, fileBuffer);
+    await saveAUser(resumeData);
     return res.status(200).json(resumeData);
 });
 pdfRouter.post("/multiple", async (req, res) => {

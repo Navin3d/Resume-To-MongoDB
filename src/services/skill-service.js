@@ -2,6 +2,17 @@ const uuid = require("uuid");
 const SkillModel = require("../models/Skill-Model");
 
 
+const findAllSkills = async () => {
+    let foundSkills;
+    try {
+        foundSkills = await SkillModel.find({});
+    } catch (e) {
+        console.error(`=====> ERROR CONNECTING TO DB <======`);
+        console.log(e);
+    }
+    return foundSkills;
+}
+
 const getASkill = async (req, res) => {
     const { skillId } = req.params;
     let foundSkill;
@@ -42,7 +53,20 @@ const saveSkill = async (req, res) => {
     });
 }
 
+const addUsersToManySkills = async (skills) => {
+    let saved;
+    try {
+        saved = await SkillModel.updateMany(skills);
+    } catch (e) {
+        console.error(`=====> ERROR CONNECTING TO DB <======`);
+        console.log(e);
+    }
+    return saved;
+}
+
 module.exports = {
+    findAllSkills,
     getASkill,
     saveSkill,
+    addUsersToManySkills,
 }

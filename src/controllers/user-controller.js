@@ -1,6 +1,6 @@
 const express = require("express");
 const userController = express.Router();
-const { getAllUsers, findAUser } = require("../services/user-service");
+const { getAllUsers, findAUser, deleteAllUsers } = require("../services/user-service");
 
 
 userController.get("", getAllUsers);
@@ -19,5 +19,6 @@ userController.get("/:userId", async (req, res) => {
         data: foundUser
     });
 });
+userController.delete("", deleteAllUsers);
 
 module.exports = userController;
