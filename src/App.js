@@ -1,16 +1,10 @@
-// import UploadBox from "./Components/UploadBox";
-// import UploadPage from "./Components/UploadPage"
-
-// import ProfilePage from "./Components/ProfilePage";
-import ProfilesList from "./Components/ProfilesList";
+import AppRouter from "./routers";
 
 import "./index.css"
 function App() {
   return (
     <div className="App">
-     {/* <UploadPage/> */}
-    <ProfilesList/>
-     {/* <ProfilePage/> */}
+     <AppRouter />
     </div>
   );
 }
