@@ -46,7 +46,6 @@ const saveAUser = async (user) => {
         saved.save();
     } else {
         detached.user_id = uuid.v4();
-        console.log(detached)
         detached.delete("_id");
         saved = await UserModel.create(detached);
         // saved = detached;
@@ -57,7 +56,6 @@ const saveAUser = async (user) => {
         const skillUsersCopy = skill.users;
         for (let userSkill of skills) {
             if (keyWords.includes(userSkill.toLowerCase())) {
-                console.log(skillUsersCopy.length)
                 if (skillUsersCopy.length == 0) {
                     skill.users.push(saved);
                     skill.save();
@@ -74,7 +72,6 @@ const saveAUser = async (user) => {
             }
         }
     }
-    console.log(finalUpdatedSkills);
     waiter = await addUsersToManySkills(finalUpdatedSkills);
     return saved;
 }

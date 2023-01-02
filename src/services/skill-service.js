@@ -64,9 +64,26 @@ const addUsersToManySkills = async (skills) => {
     return saved;
 }
 
+const getASkillByName = async (req, res) => {
+    const { skillName } = req.params;
+    let foundSkill;
+    try {
+        foundSkill = await SkillModel.findOne({ title: skillName.trim() });
+    } catch (e) {
+        console.error(`=====> ERROR CONNECTING TO DB <======`);
+        console.log(e);
+        return res.status(200).json({
+            skillId,
+            message: "Unable to Connect Db at the moment..."
+        });
+    }
+    return res.status(200).json(foundSkill);
+}
+
 module.exports = {
     findAllSkills,
     getASkill,
     saveSkill,
     addUsersToManySkills,
+    getASkillByName,
 }

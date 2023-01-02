@@ -10,6 +10,10 @@ const UserSchema = new mongoose.Schema({
         type: String,
         unique: true
     },
+    summary: String,
+    education: String,
+    awards: String,
+    honors: String,
     links: [String]
 });
 const UserModel = mongoose.model("User", UserSchema);
