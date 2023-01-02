@@ -9,8 +9,7 @@ const AppRouter = () => (
     <Routes>
       <Route path="/" element={<UploadPage />} exact={true} />
       <Route path="/profiles" element={<ProfilesList/>} />
-      <Route path="/userprofile" element={<ProfilePage />} />
-     
+      <Route path="/user/:userId" element={<ProfilePage />} />     
     </Routes>
   </BrowserRouter>
 );
