@@ -5,10 +5,43 @@ import { Input } from 'antd';
 import axios from 'axios';
 const { Search } = Input;
 
+
+const INITIAL_SKILLS = [
+  {
+    "_id": "63b1418f9065bdbc93136e19",
+    "title": "Spring Boot",
+    "description": "Spring Boot makes it easy to create stand-alone, production-grade Spring based Applications",
+    "keywords": [
+      "spring",
+      "boot",
+      "spring boot",
+      "spring_boot"
+    ],
+    "users": [],
+    "skill_id": "52d3581c-cf3f-4ccf-8bc3-531e34d18ebb",
+    "__v": 50
+  },
+  {
+    "_id": "63b177e8b98a1fcaf9aa1cb1",
+    "title": "React JS",
+    "description": "Spring Boot makes it easy to create stand-alone, production-grade Spring based Applications",
+    "keywords": [
+      "react",
+      "react.js",
+      "react js",
+      "react_js"
+    ],
+    "users": [],
+    "skill_id": "455bc41c-5add-4222-85e8-1a4d394a4317",
+    "__v": 78
+  }
+];
+
 function ProfilesList() {
   const fakeDataUrl = `http://localhost:3001/user`;
   const [data, setData] = useState([]);
   const [list, setList] = useState([]);
+  const [skills, setSkills] = useState(INITIAL_SKILLS);
   const initList = async (searchKey) => {
     const resonse = await axios.get(`http://localhost:3001/skill/name/${searchKey}`);
     if (!resonse.data) {
@@ -19,10 +52,33 @@ function ProfilesList() {
       setData(resonse.data.users);
     }
   }
+  const initSkills = async () => {
+    const response = await axios.get("http://localhost:3001/skill");
+    setSkills(response.data);
+  }
   const onSearch = (value) => {
     initList(value);
   };
+  const onChange = e => {
+    const value = e.target.value.trim();
+    if (value == "") {
+      fetch(fakeDataUrl)
+        .then((res) => res.json())
+        .then((res) => {
+          setData(res.data);
+          setList(res.data);
+        });
+    } else {
+      for (let skill of skills) {
+        if (skill.keywords.includes(value.toLowerCase())) {
+          setList(skill.users);
+          setData(skill.users);
+        }
+      }
+    }
+  }
   useEffect(() => {
+    initSkills();
     fetch(fakeDataUrl)
       .then((res) => res.json())
       .then((res) => {
@@ -59,6 +115,7 @@ function ProfilesList() {
                   allowClear
                   enterButton="Search"
                   size="large"
+                  onChange={onChange}
                   onSearch={onSearch}
                 />
               </ConfigProvider>
