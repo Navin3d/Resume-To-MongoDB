@@ -11,6 +11,12 @@ pdf2json.use(bodyParser.urlencoded({ extended: false }));
 pdf2json.use(bodyParser.json());
 pdf2json.use(expressFileUpload());
 pdf2json.use(cors());
+pdf2json.get("/", (req, res) => {
+    return res.status(200).json({
+        statusCode: 200,
+        message: "the server is UP..."
+    });
+});
 pdf2json.use("/pdf", pdfController);
 pdf2json.use("/skill", skillController);
 pdf2json.use("/user", userController);
