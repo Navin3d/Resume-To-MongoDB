@@ -1,0 +1,20 @@
+version: '3'
+services:
+  mongodb-server:
+    image: "mongo"
+    container_name: "mongodb-data-extration-from-pdf"
+    restart: "always"
+    environment:
+      MONGO_INITDB_ROOT_PASSWORD: mongopw
+      MONGO_INITDB_ROOT_USERNAME: docker
+    ports:
+      - "27017:27017"
+  data-extractor:
+    build:
+      context: .
+      dockerfile: "Dockerfile"
+    ports:
+      - "3001:3001"
+    depends_on:
+      - "mongodb-server"
+    restart: "unless-stopped"

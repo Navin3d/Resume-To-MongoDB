@@ -44,6 +44,7 @@ const jsonFormatter = async (req, res) => {
                 if (page.content[0].str.split(" ").length > 1) {
                     returnValue["firstName"] = page.content[0].str.split(" ")[0];
                     returnValue["lastName"] = page.content[0].str.split(" ")[1];
+                    returnValue["place"] =  page.content[2].str;
                 } else {
                     returnValue["name"] = page.content[0].str.split(" ");
                 }
@@ -128,3 +129,9 @@ module.exports = {
     parseAResume,
     showAFile,
 }
+
+
+// convert word to pdf and parse.
+// open xml
+// libreoffice
+// pandoc
