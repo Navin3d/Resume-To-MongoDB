@@ -87,7 +87,7 @@ const filterUser = async (req, res) => {
     if (key == "all" && value == "all") {
         users = await UserModel.find({});
     } else {
-        value = value.split(", ")
+        value = value.split(",").map(val => val.trim());
         const valueRegex = new RegExp(value.join("|"), 'i');
         users = await UserModel.aggregate([
             {
@@ -106,11 +106,6 @@ const saveManyUsers = async () => {
 
 const deleteAllUsers = async (req, res) => {
     await UserModel.deleteMany({});
-    const skills = await SkillModel.find({});
-    for (let skill of skills) {
-        skill.users = [];
-        skill.save();
-    }
     return res.status(200).json("Deleted...");
 }
 

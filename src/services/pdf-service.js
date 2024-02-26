@@ -33,7 +33,7 @@ const validateMobileNumber = (input_str) => {
 }
 
 const jsonFormatter = async (req, res) => {
-    const parsed = await jsonFormatHandler(req.files.file["data"]);
+    const parsed = await jsonFormatHandler(req.files.files["data"]);
     await saveAUser(parsed);
     return res.status(200).json(parsed);
 }
