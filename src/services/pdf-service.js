@@ -4,6 +4,7 @@ const ResumeParser = require("resume-parser");
 const fs = require("fs");
 const path = require('path');
 const { BASE_URL } = require("../utils/Config");
+const { saveAUser } = require('./user-service');
 
 
 const statusCheck = (req, res) => (
@@ -14,7 +15,7 @@ const statusCheck = (req, res) => (
 )
 
 const extractTextFromPdf = async (fileData) => {
-    const data = await pdfExtract.extractBuffer(fileData);
+    const data = await pdfExtract.extractBuffer(fileData).catch(e => console.log(e));
     return data;
 }
 
@@ -32,15 +33,21 @@ const validateMobileNumber = (input_str) => {
 }
 
 const jsonFormatter = async (req, res) => {
-    const returnValue = {};
+    const parsed = await jsonFormatHandler(req.files.file["data"]);
+    await saveAUser(parsed);
+    return res.status(200).json(parsed);
+}
+
+const jsonFormatHandler = async fileBuffer => {
+    let returnValue = {};
     const TOPSECTIONNAME = "boomerism";
     const headers = ["summary", "experience", "education", "licenses & certifications", "skills", "honors & awards", "profile info", "projects", "acheivements"];
-    const data = await extractTextFromPdf(req.files.files["data"]);
+    const data = await extractTextFromPdf(fileBuffer);
     var activeHeader = TOPSECTIONNAME;
     for (let pageIndex in data.pages) {
         let page = data.pages[pageIndex];
         for (let content of page.content) {
-            if (activeHeader === TOPSECTIONNAME) {
+            if (activeHeader == TOPSECTIONNAME) {
                 if (page.content[0].str.split(" ").length > 1) {
                     returnValue["firstName"] = page.content[0].str.split(" ")[0];
                     returnValue["lastName"] = page.content[0].str.split(" ")[1];
@@ -70,11 +77,11 @@ const jsonFormatter = async (req, res) => {
                 returnValue["links"].push(link);
             }
         } else {
-            returnValue["links"] = page.links
+            returnValue["links"] = page.links;
         }
     }
-    returnValue.skills = returnValue.skills.split(" • ");
-    return res.status(200).json(returnValue);
+    returnValue.skills = returnValue.skills?.split(" • ").map(skill => skill.trim());
+    return returnValue;
 }
 
 const showAFile = (req, res) => {
@@ -104,22 +111,23 @@ const deleteAFile = (filePath) => {
 }
 
 const parseAResume = async (fileName, fileBuffer) => {
-    const DIRECTORY = "../../public";
-    const pdfFileLocation = `${DIRECTORY}/${fileName}`;
-    const jsonFileLocation = `${DIRECTORY}/json/${fileName}`;
-    const pdfFilePath = path.join(__dirname, pdfFileLocation);
-    // const jsonFilePath = path.join(__dirname, jsonFileLocation);
-    const resumeURL = `${BASE_URL}/pdf/single?name=${fileName}`;
-    var waiter;
-    waiter = writeFile(pdfFilePath, fileBuffer);
-    let returnValue;
-    waiter = await ResumeParser.parseResumeUrl(resumeURL).then(file => {
-        returnValue = file;
-    })
-    .catch(error => {
-        console.error(error);
-    });    
-    deleteAFile(pdfFilePath);
+    // const DIRECTORY = "../../public";
+    // const pdfFileLocation = `${DIRECTORY}/${fileName}`;
+    // const jsonFileLocation = `${DIRECTORY}/json/${fileName}`;
+    // const pdfFilePath = path.join(__dirname, pdfFileLocation);
+    // // const jsonFilePath = path.join(__dirname, jsonFileLocation);
+    // const resumeURL = `${BASE_URL}/pdf/single?name=${fileName}`;
+    // var waiter;
+    // waiter = writeFile(pdfFilePath, fileBuffer);
+    // let returnValue;
+    // waiter = await ResumeParser.parseResumeUrl(resumeURL).then(file => {
+    //     returnValue = file;
+    // })
+    // .catch(error => {
+    //     console.error(error);
+    // });
+    const returnValue = await jsonFormatHandler(fileBuffer); 
+    // deleteAFile(pdfFilePath);
     return returnValue;
 }
 

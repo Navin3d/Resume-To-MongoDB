@@ -33,16 +33,21 @@ const findAUser = async (userId) => {
 
 const saveAUser = async (user) => {
     var saved, waiter;
-    const skills = user.skills.split(" ");
+    const skills = user.skills;
     const allSkills = await findAllSkills();
     let detached = new UserModel(user);
     let existsWithEmail = await UserModel.count({ email: detached.email });
     if (existsWithEmail != 0) {
         // console.log(detached);
         saved = await UserModel.findOne({ email: detached.email });
+        saved.firstname = detached.firstName;
+        saved.lastName = detached.lastName;
+        saved.place = detached.place;
         saved.name = detached.name;
         saved.mobile_number = detached.mobile_number;
         saved.links = detached.links;
+        saved.education = detached.education;
+        saved.skills = detached?.skills;
         saved.save();
     } else {
         detached.user_id = uuid.v4();
@@ -64,8 +69,8 @@ const saveAUser = async (user) => {
                 for (let user of skillUsersCopy) {
                     if (user["user_id"] != saved.user_id) {
                         skill.users.push(saved);
-                        // console.log(skill);
-                        // skill.save();
+                        console.log(skill);
+                        skill.save();
                         finalUpdatedSkills.push(skill);
                     }
                 }
@@ -76,8 +81,27 @@ const saveAUser = async (user) => {
     return saved;
 }
 
+const filterUser = async (req, res) => {
+    let { key, value } = req.params;
+    let users;
+    if (key == "all" && value == "all") {
+        users = await UserModel.find({});
+    } else {
+        value = value.split(", ")
+        const valueRegex = new RegExp(value.join("|"), 'i');
+        users = await UserModel.aggregate([
+            {
+                $match: {
+                    [key]: { $regex: valueRegex },
+                }
+            }
+        ]);
+    }
+    return res.status(200).json(users);
+}
+
 const saveManyUsers = async () => {
-    
+
 }
 
 const deleteAllUsers = async (req, res) => {
@@ -94,5 +118,6 @@ module.exports = {
     getAllUsers,
     findAUser,
     saveAUser,
+    filterUser,
     deleteAllUsers,
 }

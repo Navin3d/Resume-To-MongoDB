@@ -5,6 +5,9 @@ const UserSchema = new mongoose.Schema({
         unique: true
     },
     name: String,
+    firstName: String,
+    lastName: String,
+    place: String,
     mobile_number: String,
     email: {
         type: String,
@@ -14,7 +17,8 @@ const UserSchema = new mongoose.Schema({
     education: String,
     awards: String,
     honors: String,
-    links: [String]
+    links: [String],
+    skills: [String]
 });
 const UserModel = mongoose.model("User", UserSchema);
 module.exports = UserModel;

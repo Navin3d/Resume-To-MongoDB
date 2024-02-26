@@ -1,6 +1,6 @@
 FROM node:18-alpine
 
-WORKDIR /usr/projects/resume_parser
+WORKDIR /usr/resume_parser
 
 COPY ./package.json ./package.json
 RUN npm i
