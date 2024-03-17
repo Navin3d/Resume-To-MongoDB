@@ -4,7 +4,7 @@ WORKDIR /usr/resume_parser
 
 COPY ./package.json ./package.json
 RUN npm i
-COPY . .
+COPY ./src ./src
 
 EXPOSE 3001
 
